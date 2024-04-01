@@ -1,29 +1,62 @@
 namespace TickTask;
 
+public enum TaskState
+{
+    Pending,
+    Waiting,
+    Recurring,
+    Deleted,
+    Completed,
+}
+
 public partial struct TaskData
 {
     public string Name = "";
-    public TaskTime CreateDate { get; set; }
+    public TaskTime CreateDate { get; private set; }
     public TaskTime ModifiedDate { get; private set; }
 
+    public string _project;
     public string Project
     {
         get
         {
-            return Project;
+            return _project;
         }
-        private set
+        set
         {
+            _project = value;
             ModifiedDate = TaskTime.CurrentTime;
-            Project = value;
         }
     }
+
+    public TaskState _state;
+    public TaskState State
+    {
+        get
+        {
+            return _state;
+        }
+        set
+        {
+            _state = value;
+            ModifiedDate = TaskTime.CurrentTime;
+        }
+    }
+
+    public string UUID { get; private set; }
 
     public List<string> Tags { get; private set; } = [];
 
     public TaskData()
     {
+        _project = "Inbox";
         CreateDate = TaskTime.CurrentTime;
         ModifiedDate = TaskTime.CurrentTime;
+        UUID = Guid.NewGuid().ToString();
+    }
+
+    public override string ToString()
+    {
+        return $"""[name:"{Name}" time:"{CreateDate},{ModifiedDate}" state:"{State}" uuid:"{UUID}"]""";
     }
 }

@@ -10,11 +10,13 @@ public partial struct TaskData
         ModifiedDate = TaskTime.CurrentTime;
     }
 
-    public static TaskData Create(string name)
+    public static TaskData Create(string name, string project = "Inbox", TaskState state = TaskState.Pending)
     {
         var task = new TaskData
         {
             Name = name,
+            Project = project,
+            State = state,
         };
 
         return task;
