@@ -9,7 +9,7 @@ public enum TaskState
     Completed,
 }
 
-public partial struct TaskData
+public partial struct TaskItem
 {
     public string Name = "";
     public TaskTime CreateDate { get; private set; }
@@ -47,7 +47,7 @@ public partial struct TaskData
 
     public List<string> Tags { get; private set; } = [];
 
-    public TaskData()
+    public TaskItem()
     {
         _project = "Inbox";
         CreateDate = TaskTime.CurrentTime;

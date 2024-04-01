@@ -2,7 +2,7 @@ namespace TickTask.Test;
 
 using TickTask;
 
-public class TestTaskData
+public class TestTaskItem
 {
     [Fact]
     public void TestCurrentDate()
