@@ -22,7 +22,7 @@ public class AssetManager
         }
     }
 
-    private static string LoadConfig(string fileName)
+    public static string Load(string fileName)
     {
         string filePath = Path.Combine(ConfigFolderPath, fileName);
 
@@ -33,7 +33,7 @@ public class AssetManager
         return text;
     }
 
-    private static void SaveConfig(string fileName, string text)
+    public static void Save(string fileName, string text)
     {
         CheckAndInit();
         string filePath = Path.Combine(ConfigFolderPath, fileName);

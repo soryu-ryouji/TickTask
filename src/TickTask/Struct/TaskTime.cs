@@ -11,6 +11,11 @@ public struct TaskTime()
 
     public static TaskTime CurrentTime => new() { Time = DateTimeToTaskTime(DateTime.UtcNow) };
 
+    public static TaskTime Create(string taskTimeStr)
+    {
+        return new TaskTime() { Time = taskTimeStr };
+    }
+
     /// <summary>
     /// Convert UTC Time To TaskTime
     /// </summary>

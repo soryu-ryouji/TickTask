@@ -1,21 +1,12 @@
 namespace TickTask;
 
-public enum TaskState
-{
-    Pending,
-    Waiting,
-    Recurring,
-    Deleted,
-    Completed,
-}
-
 public partial struct TaskItem
 {
     public string Name = "";
     public TaskTime CreateDate { get; private set; }
     public TaskTime ModifiedDate { get; private set; }
 
-    public string _project;
+    public string _project = "";
     public string Project
     {
         get
@@ -53,6 +44,15 @@ public partial struct TaskItem
         CreateDate = TaskTime.CurrentTime;
         ModifiedDate = TaskTime.CurrentTime;
         UUID = Guid.NewGuid().ToString();
+    }
+
+    public TaskItem(string name, TaskTime createDate, TaskTime modifiedDate, TaskState state ,string uuid)
+    {
+        Name = name;
+        CreateDate = createDate;
+        ModifiedDate = modifiedDate;
+        _state = state;
+        UUID = uuid;
     }
 
     public override string ToString()
