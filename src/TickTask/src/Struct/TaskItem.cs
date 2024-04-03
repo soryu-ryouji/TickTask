@@ -34,6 +34,8 @@ public partial struct TaskItem
         }
     }
 
+    public int order;
+
     public string UUID { get; private set; }
 
     public List<string> Tags { get; private set; } = [];
