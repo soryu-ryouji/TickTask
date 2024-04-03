@@ -37,7 +37,6 @@ public class AssetManager
     {
         CheckAndInit();
         string filePath = Path.Combine(ConfigFolderPath, fileName);
-        Console.WriteLine(filePath);
         File.WriteAllText(filePath, text, Encoding.UTF8);
     }
 }

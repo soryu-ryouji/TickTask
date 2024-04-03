@@ -19,10 +19,13 @@ class TaskModel
     private static List<TaskItem> s_tasks = [];
     private static List<int> s_tasksOrder = [];
 
-    public static int[] Search(TaskDataFlag flag, string searchStr)
+    static TaskModel()
     {
         Init();
+    }
 
+    public static int[] Search(TaskDataFlag flag, string searchStr)
+    {
         var result = flag switch
         {
             TaskDataFlag.Name => SearchWithName(searchStr),
@@ -66,22 +69,27 @@ class TaskModel
         Export();
     }
 
+    public static List<TaskItem> GetTask(string fillter)
+    {
+        return s_tasks;
+    }
+
     public static void Init()
     {
-        var dataTxt = AssetManager.Load("data.tt");
+        // Console.WriteLine("Init Task Model");
+        var dataTxt = AssetManager.Load("data.ticktask");
         s_tasks = Parse(dataTxt);
     }
 
     public static void Export()
     {
         var text = string.Join(Environment.NewLine, s_tasks.Select(task => task.ToString()));
-        Console.WriteLine("Export: \n" + text);
-
-        AssetManager.Save("data.tt", text);
+        AssetManager.Save("data.ticktask", text);
     }
 
     public static List<TaskItem> Parse(string text)
     {
+        // Console.WriteLine(text);
         var tasks = new List<TaskItem>();
 
         var matches = Regex.Matches(text, TaskItemRegexPattern);

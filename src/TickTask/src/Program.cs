@@ -1,6 +1,4 @@
-﻿using System.CommandLine;
-
-namespace TickTask;
+﻿namespace TickTask;
 
 public class Program
 {
@@ -8,11 +6,9 @@ public class Program
     {
         ParserArgs(args);
     }
- 
+
     private static void ParserArgs(string[] args)
     {
-        var rootCommand = new RootCommand();
-
-        rootCommand.Invoke(args);
+        Console.WriteLine(string.Join(" ", args));
     }
 }
