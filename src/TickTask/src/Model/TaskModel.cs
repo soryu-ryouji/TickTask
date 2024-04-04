@@ -1,3 +1,5 @@
+using System.Net;
+using System.Net.Cache;
 using System.Text.RegularExpressions;
 
 namespace TickTask;
@@ -17,7 +19,15 @@ class TaskModel
     @"\[name:""(?<Name>.+?)"" time:""(?<CreateTime>.+?),(?<ModifyTime>.+?)"" state:""(?<State>.+?)"" uuid:""(?<UUID>.+?)""\]";
 
     private static List<TaskItem> s_tasks = [];
-    private static List<int> s_tasksOrder = [];
+    // private static List<int> s_tasksOrder = [];
+
+    public static List<TaskItem> Tasks
+    {
+        get
+        {
+            return s_tasks;
+        }
+    }
 
     static TaskModel()
     {
@@ -29,21 +39,27 @@ class TaskModel
         var result = flag switch
         {
             TaskDataFlag.Name => SearchWithName(searchStr),
-            TaskDataFlag.CreateDate => SearchWithCDate(searchStr),
-            TaskDataFlag.ModifiedDate => SearchWithMDate(searchStr),
             _ => throw new NotImplementedException()
         };
-
         return result;
+    }
+
+    private static int[] FuzzySearchWithName(string name)
+    {
+        var result = from item in Tasks
+                     where item.Name.Contains(name)
+                     select Tasks.IndexOf(item);
+
+        return result.ToArray();
     }
 
     private static int[] SearchWithName(string name)
     {
-        var query = from task in s_tasks
-                    where task.Name.Contains(name)
-                    select s_tasks.IndexOf(task);
+        var result = from item in Tasks
+                     where item.Name == name
+                     select Tasks.IndexOf(item);
 
-        return query.ToArray();
+        return result.ToArray();
     }
 
     private static int[] SearchWithCDate(string date)
@@ -56,6 +72,20 @@ class TaskModel
         throw new NotImplementedException();
     }
 
+    public static void ModifiyData(int index, TaskDataFlag flag, string data)
+    {
+        switch (flag)
+        {
+            case TaskDataFlag.Name:
+                s_tasks[index].Name = data;
+                break;
+            case TaskDataFlag.State:
+                s_tasks[index].State = TaskStateExtensions.Parse(data);
+                break;
+        }
+
+        Export();
+    }
 
     public static void Add(TaskItem task)
     {

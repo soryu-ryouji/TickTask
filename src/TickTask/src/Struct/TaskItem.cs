@@ -1,6 +1,6 @@
 namespace TickTask;
 
-public partial struct TaskItem
+public partial class TaskItem
 {
     public string Name = "";
     public TaskTime CreateDate { get; private set; }
