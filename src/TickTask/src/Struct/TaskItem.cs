@@ -1,12 +1,40 @@
+using System.Text;
+
 namespace TickTask;
 
 public partial class TaskItem
 {
-    public string Name = "";
-    public TaskTime CreateDate { get; private set; }
-    public TaskTime ModifiedDate { get; private set; }
+    private string _name = "";
+    public string Name
+    {
+        get
+        {
+            return _name;
+        }
+        set
+        {
+            _name = value;
+            MTime = TaskTime.CurrentTime;
+        }
+    }
 
-    public string _project = "";
+    public TaskTime CTime { get; private set; }
+    public TaskTime MTime { get; private set; }
+    private TaskTime _dueTime;
+    public TaskTime DueTime
+    {
+        get
+        {
+            return _dueTime;
+        }
+        set
+        {
+            _dueTime = value;
+            MTime = TaskTime.CurrentTime;
+        }
+    }
+
+    private string _project = "";
     public string Project
     {
         get
@@ -16,7 +44,7 @@ public partial class TaskItem
         set
         {
             _project = value;
-            ModifiedDate = TaskTime.CurrentTime;
+            MTime = TaskTime.CurrentTime;
         }
     }
 
@@ -30,35 +58,51 @@ public partial class TaskItem
         set
         {
             _state = value;
-            ModifiedDate = TaskTime.CurrentTime;
+            MTime = TaskTime.CurrentTime;
         }
     }
 
-    public int order;
-
-    public string UUID { get; private set; }
-
-    public List<string> Tags { get; private set; } = [];
+    private string _uuid = "";
+    public string UUID
+    {
+        get
+        {
+            return _uuid;
+        }
+        private set
+        {
+            _uuid = value; MTime = TaskTime.CurrentTime;
+        }
+    }
 
     public TaskItem()
     {
+        _name = "Default Task";
         _project = "Inbox";
-        CreateDate = TaskTime.CurrentTime;
-        ModifiedDate = TaskTime.CurrentTime;
+        State = TaskState.Pending;
+        CTime = TaskTime.CurrentTime;
+        MTime = TaskTime.CurrentTime;
         UUID = Guid.NewGuid().ToString();
     }
 
-    public TaskItem(string name, TaskTime createDate, TaskTime modifiedDate, TaskState state ,string uuid)
+    public TaskItem(TaskTime ctime, TaskTime mtime) : this()
     {
-        Name = name;
-        CreateDate = createDate;
-        ModifiedDate = modifiedDate;
-        _state = state;
-        UUID = uuid;
+        CTime = ctime;
+        MTime = mtime;
     }
 
     public override string ToString()
     {
-        return $"""[name:"{Name}" time:"{CreateDate},{ModifiedDate}" state:"{State}" uuid:"{UUID}"]""";
+        var sb = new StringBuilder();
+        sb.Append("[ ");
+        sb.Append($"name:\"{Name}\" ");
+        sb.Append($"ctime:\"{CTime}\" ");
+        sb.Append($"mtime:\"{MTime}\" ");
+        sb.Append($"project:\"{Project}\" ");
+        sb.Append($"state:\"{State}\" ");
+        sb.Append($"uuid:\"{UUID}\" ");
+        sb.Append(']');
+
+        return sb.ToString();
     }
 }

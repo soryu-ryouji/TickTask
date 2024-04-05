@@ -22,13 +22,13 @@ public class AssetManager
         }
     }
 
-    public static string Load(string fileName)
+    public static List<string> Load(string fileName)
     {
         string filePath = Path.Combine(ConfigFolderPath, fileName);
 
-        if (!File.Exists(filePath)) return "";
+        if (!File.Exists(filePath)) return [];
 
-        string text = File.ReadAllText(filePath, Encoding.UTF8);
+        var text = File.ReadAllLines(filePath, Encoding.UTF8).ToList();
 
         return text;
     }
