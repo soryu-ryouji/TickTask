@@ -27,7 +27,7 @@ public partial class TaskItem
         return task;
     }
 
-    public void ChangeDataWithoutUpdateMTime(TaskDataFlag flag, string data)
+    private void ChangeDataWithoutUpdateMTime(TaskDataFlag flag, string data)
     {
         switch (flag)
         {
@@ -46,7 +46,7 @@ public partial class TaskItem
                 _state = TaskStateExtensions.Parse(data);
                 break;
             case TaskDataFlag.UUID:
-                _uuid = data;
+                _uuid = Guid.Parse(data);
                 break;
         }
     }
