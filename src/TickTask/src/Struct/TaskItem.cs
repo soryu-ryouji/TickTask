@@ -62,8 +62,8 @@ public partial class TaskItem
         }
     }
 
-    private string _uuid = "";
-    public string UUID
+    private Guid _uuid;
+    public Guid UUID
     {
         get
         {
@@ -71,7 +71,8 @@ public partial class TaskItem
         }
         private set
         {
-            _uuid = value; MTime = TaskTime.CurrentTime;
+            _uuid = value;
+            MTime = TaskTime.CurrentTime;
         }
     }
 
@@ -82,7 +83,7 @@ public partial class TaskItem
         State = TaskState.Pending;
         CTime = TaskTime.CurrentTime;
         MTime = TaskTime.CurrentTime;
-        UUID = Guid.NewGuid().ToString();
+        UUID = Guid.NewGuid();
     }
 
     public TaskItem(TaskTime ctime, TaskTime mtime) : this()
