@@ -1,5 +1,3 @@
-using System.Text.RegularExpressions;
-
 namespace TickTask;
 
 public partial class TaskModel
@@ -94,7 +92,7 @@ public partial class TaskModel
     public static List<TaskItem> Parse(List<string> text)
     {
         var result = from str in text
-                     select TaskItem.Parser(str);
+                     select TaskItem.Parse(str);
 
         return result.ToList();
     }

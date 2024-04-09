@@ -67,8 +67,11 @@ public class TaskManager
 
     public static void ListTask()
     {
-        var result = from item in TaskModel.Tasks
-                     select item.Name;
-        Console.WriteLine(string.Join("\n", result));
+        int order = 1;
+        foreach (var item in TaskModel.Tasks)
+        {
+            Console.WriteLine(order + "\t" + item.Name);
+            order += 1;
+        }
     }
 }

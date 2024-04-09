@@ -5,15 +5,15 @@ namespace TickTask;
 public partial class TaskItem
 {
     private const string TaskItemRegexPattern =
-        @"\[" +
-            @"(?<Name>name:"".+"")\s?" +
-            @"(?<CTime>ctime:"".+"")?\s?" +
-            @"(?<MTime>mtime:"".+"")?\s?" +
+        @"[" +
+            @"(?<name>name:"".+"")\s?" +
+            @"(?<ctime>ctime:"".+"")?\s?" +
+            @"(?<mtime>mtime:"".+"")?\s?" +
             @"(?<due>due:"".+"")?\s?" +
             @"(?<project>project:"".+"")?\s?" +
             @"(?<state>state:"".+"")?" +
             @"(?<uuid>uuid:"".+"")" +
-        @"\]";
+        @"]";
 
     public static TaskItem Create(string name, string project = "Inbox", TaskState state = TaskState.Pending)
     {
@@ -31,27 +31,17 @@ public partial class TaskItem
     {
         switch (flag)
         {
-            case TaskDataFlag.Name:
-                _name = data;
-                break;
-            case TaskDataFlag.CreateDate:
-                break;
-            case TaskDataFlag.Due:
-                _dueTime = TaskTime.Create(data);
-                break;
-            case TaskDataFlag.Project:
-                _project = data;
-                break;
-            case TaskDataFlag.State:
-                _state = TaskStateExtensions.Parse(data);
-                break;
-            case TaskDataFlag.UUID:
-                _uuid = Guid.Parse(data);
-                break;
+            case TaskDataFlag.Name: _name = data; break;
+            case TaskDataFlag.CreateDate: CTime = TaskTime.Create(data); break;
+            case TaskDataFlag.ModifiedDate: MTime = TaskTime.Create(data); break;
+            case TaskDataFlag.Due: _dueTime = TaskTime.Create(data); break;
+            case TaskDataFlag.Project: _project = data; break;
+            case TaskDataFlag.State: _state = TaskStateExtensions.Parse(data); break;
+            case TaskDataFlag.UUID: _uuid = _uuid = data; break;
         }
     }
 
-    public static TaskItem Parser(string item)
+    public static TaskItem Parse(string item)
     {
         var regex = new Regex(TaskItemRegexPattern);
         var match = regex.Match(item);
@@ -75,6 +65,8 @@ public partial class TaskItem
             task.ChangeDataWithoutUpdateMTime(TaskDataFlag.Project, project);
             task.ChangeDataWithoutUpdateMTime(TaskDataFlag.State, state);
             task.ChangeDataWithoutUpdateMTime(TaskDataFlag.UUID, uuid);
+
+            return task;
         }
 
         throw new NotImplementedException();
