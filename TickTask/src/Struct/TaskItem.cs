@@ -44,7 +44,7 @@ public partial class TaskItem
         }
     }
 
-    private string _dueTime = "";
+    private string _dueTime = " ";
     public string DueTime
     {
         get
@@ -58,7 +58,7 @@ public partial class TaskItem
         }
     }
 
-    private string _project = "";
+    private string _project = " ";
     public string Project
     {
         get
@@ -123,8 +123,8 @@ public partial class TaskItem
         sb.Append($"[name:\"{Name}\"]");
         sb.Append($"[ctime:\"{CTime}\"]");
         sb.Append($"[mtime:\"{MTime}\"]");
-        sb.Append($"[due:\"{DueTime}\"]");
         sb.Append($"[project:\"{Project}\"]");
+        sb.Append($"[due:\"{DueTime}\"]");
         sb.Append($"[state:\"{State}\"]");
         sb.Append($"[uuid:\"{UUID}\"]");
         sb.Append(']');

@@ -9,8 +9,8 @@ public partial class TaskItem
             @"(\[name:""(?<name>.+?)""\])?" +
             @"(\[ctime:""(?<ctime>.+?)""\])?" +
             @"(\[mtime:""(?<mtime>.+?)""\])?" +
-            @"(\[due:""(?<due>.+?)""\])?" +
             @"(\[project:""(?<project>.+?)""\])?" +
+            @"(\[due:""(?<due>.+?)""\])?" +
             @"(\[state:""(?<state>.+?)""\])?" +
             @"(\[uuid:""(?<uuid>.+?)""\])?" +
         @"\]";
@@ -20,7 +20,7 @@ public partial class TaskItem
         var task = new TaskItem
         {
             Name = name,
-            Project = project,
+            _project = project,
             State = state,
         };
 
@@ -52,11 +52,10 @@ public partial class TaskItem
             string name = match.Groups["name"].Success ? match.Groups["name"].Value : "";
             string ctime = match.Groups["ctime"].Success ? match.Groups["ctime"].Value : "";
             string mtime = match.Groups["mtime"].Success ? match.Groups["mtime"].Value : "";
-            string due = match.Groups["due"].Success ? match.Groups["due"].Value : "";
             string project = match.Groups["project"].Success ? match.Groups["project"].Value : "";
+            string due = match.Groups["due"].Success ? match.Groups["due"].Value : "";
             string state = match.Groups["state"].Success ? match.Groups["state"].Value : "";
             string uuid = match.Groups["uuid"].Success ? match.Groups["uuid"].Value : "";
-
             var task = new TaskItem();
 
             task.ChangeDataWithoutMTime(TaskDataFlag.Name, name);

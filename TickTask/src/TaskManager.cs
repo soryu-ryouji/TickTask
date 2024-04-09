@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using ConsoleTables;
 
 namespace TickTask;
 
@@ -67,10 +68,13 @@ public class TaskManager
     public static void ListTask()
     {
         int order = 1;
+        var table = new ConsoleTable("order", "name", "project", "ctime", "mtime");
         foreach (var item in TaskModel.Tasks)
         {
-            Console.WriteLine(order + "\t" + item.Name +"\t" + TaskTime.UTCToLocalTime(item.CTime));
+            table.AddRow(order, item.Name, item.Project, item.CTime, item.MTime);
             order += 1;
         }
+        
+        table.Write();
     }
 }
