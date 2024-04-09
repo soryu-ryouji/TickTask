@@ -18,10 +18,34 @@ public partial class TaskItem
         }
     }
 
-    public TaskTime CTime { get; private set; }
-    public TaskTime MTime { get; private set; }
-    private TaskTime _dueTime;
-    public TaskTime DueTime
+    private string _ctime = "";
+    public string CTime
+    {
+        get
+        {
+            return _ctime;
+        }
+        set
+        {
+            _ctime = value;
+        }
+    }
+
+    private string _mtime = "";
+    public string MTime
+    {
+        get
+        {
+            return _mtime;
+        }
+        set
+        {
+            _mtime = value;
+        }
+    }
+
+    private string _dueTime = "";
+    public string DueTime
     {
         get
         {
@@ -48,7 +72,7 @@ public partial class TaskItem
         }
     }
 
-    public TaskState _state;
+    public TaskState _state = TaskState.Pending;
     public TaskState State
     {
         get
@@ -86,7 +110,7 @@ public partial class TaskItem
         UUID = Guid.NewGuid().ToString();
     }
 
-    public TaskItem(TaskTime ctime, TaskTime mtime) : this()
+    public TaskItem(string ctime, string mtime) : this()
     {
         CTime = ctime;
         MTime = mtime;

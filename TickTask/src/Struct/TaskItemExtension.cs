@@ -6,13 +6,13 @@ public partial class TaskItem
 {
     private const string TaskItemRegexPattern =
         @"\[" +
-            @"(name:""(?<name>.+?)"")?\s?" +
-            @"(ctime:""(?<ctime>.+?)"")?\s?" +
-            @"(mtime:""(?<mtime>.+?)"")?\s?" +
-            @"(due:""(?<due>.+?)"")?\s?" +
-            @"(project:""(?<project>.+?)"")?\s?" +
-            @"(state:""(?<state>.+?)"")?" +
-            @"(uuid:""(?<uuid>.+?)"")?" +
+            @"(\[name:""(?<name>.+?)""\])?" +
+            @"(\[ctime:""(?<ctime>.+?)""\])?" +
+            @"(\[mtime:""(?<mtime>.+?)""\])?" +
+            @"(\[due:""(?<due>.+?)""\])?" +
+            @"(\[project:""(?<project>.+?)""\])?" +
+            @"(\[state:""(?<state>.+?)""\])?" +
+            @"(\[uuid:""(?<uuid>.+?)""\])?" +
         @"\]";
 
     public static TaskItem Create(string name, string project = "Inbox", TaskState state = TaskState.Pending)
@@ -27,17 +27,19 @@ public partial class TaskItem
         return task;
     }
 
-    private void ChangeDataWithoutUpdateMTime(TaskDataFlag flag, string data)
+    private void ChangeDataWithoutMTime(TaskDataFlag flag, string data)
     {
         switch (flag)
         {
             case TaskDataFlag.Name: _name = data; break;
-            case TaskDataFlag.CreateDate: CTime = TaskTime.Create(data); break;
-            case TaskDataFlag.ModifiedDate: MTime = TaskTime.Create(data); break;
-            case TaskDataFlag.Due: _dueTime = TaskTime.Create(data); break;
+            case TaskDataFlag.CreateDate: _ctime = data; break;
+            case TaskDataFlag.ModifiedDate: _mtime = data; break;
+            case TaskDataFlag.Due: _dueTime = data; break;
             case TaskDataFlag.Project: _project = data; break;
             case TaskDataFlag.State: _state = TaskStateExtensions.Parse(data); break;
             case TaskDataFlag.UUID: _uuid = _uuid = data; break;
+            default:
+                throw new ArgumentException("Task Data Flag Can't to Process");
         }
     }
 
@@ -55,16 +57,15 @@ public partial class TaskItem
             string state = match.Groups["state"].Success ? match.Groups["state"].Value : "";
             string uuid = match.Groups["uuid"].Success ? match.Groups["uuid"].Value : "";
 
-            var task = new TaskItem
-            {
-                CTime = TaskTime.Create(ctime),
-                MTime = TaskTime.Create(mtime)
-            };
-            task.ChangeDataWithoutUpdateMTime(TaskDataFlag.Name, name);
-            task.ChangeDataWithoutUpdateMTime(TaskDataFlag.Due, due);
-            task.ChangeDataWithoutUpdateMTime(TaskDataFlag.Project, project);
-            task.ChangeDataWithoutUpdateMTime(TaskDataFlag.State, state);
-            task.ChangeDataWithoutUpdateMTime(TaskDataFlag.UUID, uuid);
+            var task = new TaskItem();
+
+            task.ChangeDataWithoutMTime(TaskDataFlag.Name, name);
+            task.ChangeDataWithoutMTime(TaskDataFlag.CreateDate, ctime);
+            task.ChangeDataWithoutMTime(TaskDataFlag.ModifiedDate, mtime);
+            task.ChangeDataWithoutMTime(TaskDataFlag.Due, due);
+            task.ChangeDataWithoutMTime(TaskDataFlag.Project, project);
+            task.ChangeDataWithoutMTime(TaskDataFlag.State, state);
+            task.ChangeDataWithoutMTime(TaskDataFlag.UUID, uuid);
 
             return task;
         }
