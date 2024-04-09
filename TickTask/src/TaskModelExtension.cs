@@ -1,39 +1,7 @@
-using System.Net;
-using System.Net.Cache;
-using System.Text.RegularExpressions;
-
 namespace TickTask;
 
-public enum TaskDataFlag
+public partial class TaskModel
 {
-    Name,
-    CreateDate,
-    ModifiedDate,
-    State,
-    UUID
-}
-
-class TaskModel
-{
-    private const string TaskItemRegexPattern =
-    @"\[name:""(?<Name>.+?)"" time:""(?<CreateTime>.+?),(?<ModifyTime>.+?)"" state:""(?<State>.+?)"" uuid:""(?<UUID>.+?)""\]";
-
-    private static List<TaskItem> s_tasks = [];
-    // private static List<int> s_tasksOrder = [];
-
-    public static List<TaskItem> Tasks
-    {
-        get
-        {
-            return s_tasks;
-        }
-    }
-
-    static TaskModel()
-    {
-        Init();
-    }
-
     public static int[] Search(TaskDataFlag flag, string searchStr)
     {
         var result = flag switch
@@ -87,6 +55,17 @@ class TaskModel
         Export();
     }
 
+    public static int[] GetTaskOrder(TaskDataFlag flag, string data)
+    {
+        var order = flag switch
+        {
+            TaskDataFlag.Name => SearchWithName(data),
+            _ => throw new NotImplementedException()
+        };
+
+        return order;
+    }
+
     public static void Add(TaskItem task)
     {
         s_tasks.Add(task);
@@ -104,40 +83,17 @@ class TaskModel
         return s_tasks;
     }
 
-    public static void Init()
-    {
-        // Console.WriteLine("Init Task Model");
-        var dataTxt = AssetManager.Load("data.ticktask");
-        s_tasks = Parse(dataTxt);
-    }
-
     public static void Export()
     {
         var text = string.Join(Environment.NewLine, s_tasks.Select(task => task.ToString()));
         AssetManager.Save("data.ticktask", text);
     }
 
-    public static List<TaskItem> Parse(string text)
+    public static List<TaskItem> Parse(List<string> text)
     {
-        // Console.WriteLine(text);
-        var tasks = new List<TaskItem>();
+        var result = from str in text
+                     select TaskItem.Parse(str);
 
-        var matches = Regex.Matches(text, TaskItemRegexPattern);
-
-        foreach (Match match in matches)
-        {
-            var task = new TaskItem(
-                name: match.Groups["Name"].Value,
-                createDate: TaskTime.Create(match.Groups["CreateTime"].Value),
-                modifiedDate: TaskTime.Create(match.Groups["ModifyTime"].Value),
-                state: TaskStateExtensions.Parse(match.Groups["State"].Value),
-                uuid: match.Groups["UUID"].Value
-            );
-
-
-            tasks.Add(task);
-        }
-
-        return tasks;
+        return result.ToList();
     }
 }

@@ -1,15 +1,8 @@
-﻿using System.Reflection;
-
 namespace TickTask;
 
-public class Program
+class CommandParser
 {
-    public static void Main(string[] args)
-    {
-        ParserArgs(args);
-    }
-
-    private static void ParserArgs(string[] args)
+    public static void Parse(string[] args)
     {
         if (args.Length == 0) TaskManager.ListTask();
 
@@ -30,7 +23,7 @@ public class Program
                 break;
             case "--version":
             case "-v":
-                Console.WriteLine(GetProgramInfo());
+                Console.WriteLine(Utils.GetProgramInfo());
                 break;
             case "--help":
             case "-h":
@@ -38,21 +31,12 @@ public class Program
         };
 
         if (args.Length > 1)
-        switch (args[1])
-        {
-            case "mod":
-            case "modified":
-                TaskManager.ModifiedTask(args[0], args[2..]);
-                break;
-        }
-    }
-
-    private static string GetProgramInfo()
-    {
-        var assembly = Assembly.GetExecutingAssembly();
-        string? name = assembly.GetName().Name;
-        var version = assembly.GetName().Version;
-
-        return name + ": " + version;
+            switch (args[1])
+            {
+                case "mod":
+                case "modified":
+                    TaskManager.ModifiedTask(args[0], args[2..]);
+                    break;
+            }
     }
 }

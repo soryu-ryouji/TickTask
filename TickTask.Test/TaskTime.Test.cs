@@ -2,10 +2,11 @@ namespace TickTask.Test;
 
 using TickTask;
 
-public class TestTaskItem
+public class TestTaskTime
 {
     [Fact]
     public void TestCurrentDate()
     {
+        Assert.True(true);
     }
 }

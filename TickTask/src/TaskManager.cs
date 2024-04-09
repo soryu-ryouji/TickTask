@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using System.Xml.XPath;
 
 namespace TickTask;
 
@@ -67,8 +66,11 @@ public class TaskManager
 
     public static void ListTask()
     {
-        var result = from item in TaskModel.Tasks
-                     select item.Name;
-        Console.WriteLine(string.Join("\n", result));
+        int order = 1;
+        foreach (var item in TaskModel.Tasks)
+        {
+            Console.WriteLine(order + "\t" + item.Name +"\t" + TaskTime.UTCToLocalTime(item.CTime));
+            order += 1;
+        }
     }
 }
