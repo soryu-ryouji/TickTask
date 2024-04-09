@@ -17,8 +17,9 @@ public class TaskManager
 
     public static void RemoveTask(string[] taskArgs)
     {
-        var index = TaskModel.Search(TaskDataFlag.Name, string.Join(" ", taskArgs));
-        foreach (var i in index) TaskModel.Remove(i);
+        // if order == 1
+        // then it in the TaskModel.Task[0]
+        if (int.TryParse(taskArgs[0], out var index)) TaskModel.Remove(index - 1);
     }
 
     public static void FuzzySearchTask(string[] taskArgs)
