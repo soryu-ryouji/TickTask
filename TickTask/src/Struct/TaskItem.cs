@@ -95,14 +95,14 @@ public partial class TaskItem
     public override string ToString()
     {
         var sb = new StringBuilder();
-        sb.Append("[ ");
-        sb.Append($"name:\"{Name}\" ");
-        sb.Append($"ctime:\"{CTime}\" ");
-        sb.Append($"mtime:\"{MTime}\" ");
-        sb.Append($"due:\"{DueTime}\" ");
-        sb.Append($"project:\"{Project}\" ");
-        sb.Append($"state:\"{State}\" ");
-        sb.Append($"uuid:\"{UUID}\" ");
+        sb.Append("[");
+        sb.Append($"[name:\"{Name}\"]");
+        sb.Append($"[ctime:\"{CTime}\"]");
+        sb.Append($"[mtime:\"{MTime}\"]");
+        sb.Append($"[due:\"{DueTime}\"]");
+        sb.Append($"[project:\"{Project}\"]");
+        sb.Append($"[state:\"{State}\"]");
+        sb.Append($"[uuid:\"{UUID}\"]");
         sb.Append(']');
 
         return sb.ToString();
