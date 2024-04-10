@@ -96,52 +96,37 @@ public class TaskManager
     {
         if (listModel == "simple")
         {
-            DiyListTask("|order|name|state|");
+            DiyListTask("|order|name|project|");
         }
         if (listModel == "all")
         {
-            DiyListTask("|order|name|state|project|ctime|mtime|uuid|");
+            DiyListTask("|order|name|state|project|ctime|mtime|uuid|", true);
         }
     }
 
-    private static void DiyListTask(string rowMetadata)
+    private static void DiyListTask(string rowMetadata, bool showCompleted = false)
     {
         var metadata = rowMetadata.Split('|', StringSplitOptions.RemoveEmptyEntries);
         var table = new ConsoleTable(metadata);
 
         foreach (var item in TaskModel.Tasks)
         {
+            if (!showCompleted && item.State == TaskState.Completed) continue;
+
             var rowValues = new List<object>();
 
             foreach (var field in metadata)
             {
                 switch (field.Trim().ToLower())
                 {
-                    case "order":
-                        rowValues.Add(TaskModel.SearchTask(item));
-                        break;
-                    case "name":
-                        rowValues.Add(item.Name);
-                        break;
-                    case "state":
-                        rowValues.Add(item.State);
-                        break;
-                    case "project":
-                        rowValues.Add(item.Project);
-                        break;
-                    case "ctime":
-                        rowValues.Add(item.CTime);
-                        break;
-                    case "mtime":
-                        rowValues.Add(item.MTime);
-                        break;
-                    case "uuid":
-                        rowValues.Add(item.UUID);
-                        break;
-                    default:
-                        // Handle unknown fields or custom fields if needed
-                        rowValues.Add("");
-                        break;
+                    case "order": rowValues.Add(TaskModel.SearchTask(item)); break;
+                    case "name": rowValues.Add(item.Name); break;
+                    case "state": rowValues.Add(item.State); break;
+                    case "project": rowValues.Add(item.Project); break;
+                    case "ctime": rowValues.Add(item.CTime); break;
+                    case "mtime": rowValues.Add(item.MTime); break;
+                    case "uuid": rowValues.Add(item.UUID); break;
+                    default: break;
                 }
             }
 
