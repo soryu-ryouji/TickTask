@@ -2,7 +2,7 @@ namespace TickTask;
 
 public partial class TaskModel
 {
-    public static int[] Search(TaskDataFlag flag, string searchStr)
+    public static int[] SearchTasks(TaskDataFlag flag, string searchStr)
     {
         var result = flag switch
         {
@@ -28,6 +28,11 @@ public partial class TaskModel
                      select Tasks.IndexOf(item);
 
         return result.ToArray();
+    }
+
+    public static int SearchTask(TaskItem item)
+    {
+        return s_tasks.IndexOf(item);
     }
 
     private static int[] SearchWithCDate(string date)
