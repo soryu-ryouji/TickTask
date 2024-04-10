@@ -12,7 +12,7 @@ class CommandParser
                 TaskManager.AddTask(args[1..]);
                 break;
             case "ls":
-                TaskManager.ListTask();
+                TaskManager.ListTask(args[1..]);
                 break;
             case "rm":
             case "remove":
@@ -36,6 +36,10 @@ class CommandParser
                 case "mod":
                 case "modified":
                     TaskManager.ModifiedTask(args[0], args[2..]);
+                    break;
+                case "done":
+                    int.TryParse(args[0], out var index);
+                    TaskManager.CompleteTask(index);
                     break;
             }
     }

@@ -15,6 +15,11 @@ public class TaskManager
         TaskModel.Add(TaskItem.Create(string.Join(" ", taskArgs)));
     }
 
+    public static void CompleteTask(int index)
+    {
+        TaskModel.ModifiyData(index - 1, TaskDataFlag.State, "Completed");
+    }
+
     public static void RemoveTask(string[] taskArgs)
     {
         // if order == 1
@@ -29,7 +34,7 @@ public class TaskManager
 
     public static void FuzzySearchTask(string taskName)
     {
-        var indexs = TaskModel.Search(TaskDataFlag.Name, taskName);
+        var indexs = TaskModel.SearchTasks(TaskDataFlag.Name, taskName);
         if (indexs.Length == 0) return;
 
         foreach (var i in indexs)
@@ -52,7 +57,7 @@ public class TaskManager
             string due = match.Groups["due"].Success ? match.Groups["due"].Value : "";
             string state = match.Groups["state"].Success ? match.Groups["state"].Value : "";
 
-            var indexs = TaskModel.Search(TaskDataFlag.Name, taskName);
+            var indexs = TaskModel.SearchTasks(TaskDataFlag.Name, taskName);
             if (indexs.Length == 0) return;
 
             foreach (var i in indexs)
@@ -66,16 +71,83 @@ public class TaskManager
         }
     }
 
-    public static void ListTask()
+
+    public static void ListTask(string[] args)
     {
-        int order = 1;
-        var table = new ConsoleTable("order", "name", "project", "ctime", "mtime");
+        if (args.Length == 0)
+        {
+            ListTask("simple");
+            return;
+        }
+
+        switch (args[0])
+        {
+            case "-a":
+            case "--all":
+                ListTask("all");
+                break;
+            default:
+                ListTask("simple");
+                break;
+        }
+    }
+
+    public static void ListTask(string listModel = "all")
+    {
+        if (listModel == "simple")
+        {
+            DiyListTask("|order|name|state|");
+        }
+        if (listModel == "all")
+        {
+            DiyListTask("|order|name|state|project|ctime|mtime|uuid|");
+        }
+    }
+
+    private static void DiyListTask(string rowMetadata)
+    {
+        var metadata = rowMetadata.Split('|', StringSplitOptions.RemoveEmptyEntries);
+        var table = new ConsoleTable(metadata);
+
         foreach (var item in TaskModel.Tasks)
         {
-            table.AddRow(order, item.Name, item.Project, item.CTime, item.MTime);
-            order += 1;
+            var rowValues = new List<object>();
+
+            foreach (var field in metadata)
+            {
+                switch (field.Trim().ToLower())
+                {
+                    case "order":
+                        rowValues.Add(TaskModel.SearchTask(item));
+                        break;
+                    case "name":
+                        rowValues.Add(item.Name);
+                        break;
+                    case "state":
+                        rowValues.Add(item.State);
+                        break;
+                    case "project":
+                        rowValues.Add(item.Project);
+                        break;
+                    case "ctime":
+                        rowValues.Add(item.CTime);
+                        break;
+                    case "mtime":
+                        rowValues.Add(item.MTime);
+                        break;
+                    case "uuid":
+                        rowValues.Add(item.UUID);
+                        break;
+                    default:
+                        // Handle unknown fields or custom fields if needed
+                        rowValues.Add("");
+                        break;
+                }
+            }
+
+            table.AddRow(rowValues.ToArray());
         }
-        
+
         table.Write();
     }
 }
