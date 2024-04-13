@@ -3,7 +3,7 @@ using ConsoleTables;
 
 namespace TickTask;
 
-public class TaskManager
+public class TaskController
 {
     public static void AddTask(TaskItem task)
     {
@@ -41,6 +41,13 @@ public class TaskManager
         {
             Console.WriteLine(TaskModel.Tasks[i].Name);
         }
+    }
+
+    public static void WriteNote(int index, string content)
+    {
+        Console.WriteLine("content: " + content);
+        TaskModel.Tasks[index].Note = content;
+        TaskModel.Export();
     }
 
     public static void ModifiedTask(string taskName, string[] taskArgs)
@@ -96,11 +103,11 @@ public class TaskManager
     {
         if (listModel == "simple")
         {
-            DiyListTask("|order|name|project|");
+            DiyListTask("|order|description|project|");
         }
         if (listModel == "all")
         {
-            DiyListTask("|order|name|state|project|ctime|mtime|uuid|", true);
+            DiyListTask("|order|description|state|project|ctime|mtime|uuid|", true);
         }
     }
 
@@ -120,7 +127,22 @@ public class TaskManager
                 switch (field.Trim().ToLower())
                 {
                     case "order": rowValues.Add(TaskModel.SearchTask(item)); break;
-                    case "name": rowValues.Add(item.Name); break;
+                    case "description":
+                        if (item.Note != "")
+                        {
+                            var content =
+                            $"""
+                            {item.Name}
+                            
+                            {item.Note}
+                            """;
+                            rowValues.Add(content);
+                        }
+                        else
+                        {
+                            rowValues.Add(item.Name);
+                        }
+                        break;
                     case "state": rowValues.Add(item.State); break;
                     case "project": rowValues.Add(item.Project); break;
                     case "ctime": rowValues.Add(item.CTime); break;

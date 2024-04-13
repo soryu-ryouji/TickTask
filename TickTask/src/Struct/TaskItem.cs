@@ -100,6 +100,20 @@ public partial class TaskItem
         }
     }
 
+    private string _note = "";
+    public string Note
+    {
+        get
+        {
+            return _note;
+        }
+        set
+        {
+            _note = value;
+            MTime = TaskTime.CurrentTime;
+        }
+    }
+
     public TaskItem()
     {
         _name = "Default Task";
@@ -119,7 +133,7 @@ public partial class TaskItem
     public override string ToString()
     {
         var sb = new StringBuilder();
-        sb.Append("[");
+        sb.Append('[');
         sb.Append($"[name:\"{Name}\"]");
         sb.Append($"[ctime:\"{CTime}\"]");
         sb.Append($"[mtime:\"{MTime}\"]");
@@ -127,6 +141,7 @@ public partial class TaskItem
         sb.Append($"[due:\"{DueTime}\"]");
         sb.Append($"[state:\"{State}\"]");
         sb.Append($"[uuid:\"{UUID}\"]");
+        sb.Append($"[note:\"{Note}\"]");
         sb.Append(']');
 
         return sb.ToString();

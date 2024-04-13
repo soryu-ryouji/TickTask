@@ -8,11 +8,4 @@
     <PublishAot>true</PublishAot>
   </PropertyGroup>
 
-  <ItemGroup>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="ConsoleTables" Version="2.4.2" />
-  </ItemGroup>
-
 </Project>
