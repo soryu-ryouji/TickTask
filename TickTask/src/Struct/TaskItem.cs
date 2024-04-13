@@ -130,19 +130,30 @@ public partial class TaskItem
         MTime = mtime;
     }
 
+    public TaskItem(List<(TaskDataFlag flag, string value)> datas)
+    {
+        foreach (var (flag, value) in datas)
+        {
+            ChangeDataWithoutMTime(flag, value);
+        }
+    }
+
+    public TaskItem(string name) : this()
+    {
+        _name = name;
+    }
+
     public override string ToString()
     {
         var sb = new StringBuilder();
-        sb.Append('[');
-        sb.Append($"[name:\"{Name}\"]");
-        sb.Append($"[ctime:\"{CTime}\"]");
-        sb.Append($"[mtime:\"{MTime}\"]");
-        sb.Append($"[project:\"{Project}\"]");
-        sb.Append($"[due:\"{DueTime}\"]");
-        sb.Append($"[state:\"{State}\"]");
-        sb.Append($"[uuid:\"{UUID}\"]");
-        sb.Append($"[note:\"{Note}\"]");
-        sb.Append(']');
+        sb.Append($"[name:{Name}]");
+        sb.Append($"[ctime:{CTime}]");
+        sb.Append($"[mtime:{MTime}]");
+        sb.Append($"[project:{Project}]");
+        sb.Append($"[due:{DueTime}]");
+        sb.Append($"[state:{State}]");
+        sb.Append($"[uuid:{UUID}]");
+        sb.Append($"[note:{Note}]");
 
         return sb.ToString();
     }
