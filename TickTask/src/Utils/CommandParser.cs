@@ -50,13 +50,13 @@ class CommandParser
                         TaskController.WriteNote(index, string.Join(" ", args[2..]));
                         break;
                     }
-                // case "app":
-                // case "append":
-                //     {
-                //         int.TryParse(args[0], out var index);
-                //         TaskManager.AppendNote(index, string.Join(" ", args[2..]));
-                //         break;
-                //     }
+                case "app":
+                case "append":
+                    {
+                        int.TryParse(args[0], out var index);
+                        TaskController.AppendNote(index, string.Join(" ", args[2..]));
+                        break;
+                    }
                 // case "appln":
                 // case "appendline":
                 //     {

@@ -51,6 +51,12 @@ public class TaskController
         TaskModel.Export();
     }
 
+    public static void AppendNote(int index, string content)
+    {
+        TaskModel.Tasks[index].Note += content;
+        TaskModel.Export();
+    }
+
     public static void ModifiedTask(string taskName, string[] taskArgs)
     {
         var taskStr = string.Join(" ", taskArgs);
