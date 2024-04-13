@@ -93,12 +93,4 @@ public partial class TaskModel
         var text = string.Join(Environment.NewLine, s_tasks.Select(task => task.ToString()));
         AssetController.Save("data.ticktask", text);
     }
-
-    public static List<TaskItem> Parse(List<string> text)
-    {
-        var result = from str in text
-                     select TaskItem.Parse(str);
-
-        return result.ToList();
-    }
 }

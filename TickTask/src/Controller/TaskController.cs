@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using TerminalTables;
+using TickTask.Parser;
 
 namespace TickTask;
 
@@ -12,7 +13,8 @@ public class TaskController
 
     public static void AddTask(string[] taskArgs)
     {
-        TaskModel.Add(TaskItem.Create(string.Join(" ", taskArgs)));
+        var taskItem = ArgumentParser.ParseAddCommand(string.Join(" ", taskArgs));
+        TaskModel.Add(taskItem);
     }
 
     public static void CompleteTask(int index)
@@ -45,7 +47,6 @@ public class TaskController
 
     public static void WriteNote(int index, string content)
     {
-        Console.WriteLine("content: " + content);
         TaskModel.Tasks[index].Note = content;
         TaskModel.Export();
     }
