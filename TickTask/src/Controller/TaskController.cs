@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using ConsoleTables;
+using TerminalTables;
 
 namespace TickTask;
 
@@ -107,26 +107,26 @@ public class TaskController
         }
         if (listModel == "all")
         {
-            DiyListTask("|order|description|state|project|ctime|mtime|uuid|", true);
+            DiyListTask("|order|description|state|project|ctime|mtime|", true);
         }
     }
 
     private static void DiyListTask(string rowMetadata, bool showCompleted = false)
     {
         var metadata = rowMetadata.Split('|', StringSplitOptions.RemoveEmptyEntries);
-        var table = new ConsoleTable(metadata);
+        var table = new Table(metadata);
 
         foreach (var item in TaskModel.Tasks)
         {
             if (!showCompleted && item.State == TaskState.Completed) continue;
 
-            var rowValues = new List<object>();
+            var rowValues = new List<string>();
 
             foreach (var field in metadata)
             {
                 switch (field.Trim().ToLower())
                 {
-                    case "order": rowValues.Add(TaskModel.SearchTask(item)); break;
+                    case "order": rowValues.Add(TaskModel.SearchTask(item).ToString()); break;
                     case "description":
                         if (item.Note != "")
                         {
@@ -143,11 +143,10 @@ public class TaskController
                             rowValues.Add(item.Name);
                         }
                         break;
-                    case "state": rowValues.Add(item.State); break;
+                    case "state": rowValues.Add(item.State.ToString()); break;
                     case "project": rowValues.Add(item.Project); break;
                     case "ctime": rowValues.Add(item.CTime); break;
                     case "mtime": rowValues.Add(item.MTime); break;
-                    case "uuid": rowValues.Add(item.UUID); break;
                     default: break;
                 }
             }
@@ -155,6 +154,6 @@ public class TaskController
             table.AddRow(rowValues.ToArray());
         }
 
-        table.Write();
+        Console.Write(table.Export(20));
     }
 }
