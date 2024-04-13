@@ -16,7 +16,7 @@ public partial class TaskModel : IEnumerable<TaskItem>
 
     static TaskModel()
     {
-        var dataTxt = AssetManager.Load("data.ticktask");
+        var dataTxt = AssetController.Load("data.ticktask");
         s_tasks = Parse(dataTxt);
     }
 

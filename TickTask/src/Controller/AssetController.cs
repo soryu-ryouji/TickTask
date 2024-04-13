@@ -2,14 +2,14 @@ using System.Text;
 
 namespace TickTask;
 
-public class AssetManager
+public class AssetController
 {
     private static string ConfigFolderPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "TickTask"
         );
 
-    static AssetManager()
+    static AssetController()
     {
         CheckAndInit();
     }

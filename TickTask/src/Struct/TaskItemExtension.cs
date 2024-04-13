@@ -13,6 +13,7 @@ public partial class TaskItem
             @"(\[due:""(?<due>.+?)""\])?" +
             @"(\[state:""(?<state>.+?)""\])?" +
             @"(\[uuid:""(?<uuid>.+?)""\])?" +
+            @"(\[note:""(?<note>.+?)""\])?" +
         @"\]";
 
     public static TaskItem Create(string name, string project = "Inbox", TaskState state = TaskState.Pending)
@@ -38,6 +39,7 @@ public partial class TaskItem
             case TaskDataFlag.Project: _project = data; break;
             case TaskDataFlag.State: _state = TaskStateExtensions.Parse(data); break;
             case TaskDataFlag.UUID: _uuid = _uuid = data; break;
+            case TaskDataFlag.Note: _note = _note = data; break;
             default:
                 throw new ArgumentException("Task Data Flag Can't to Process");
         }
@@ -56,6 +58,7 @@ public partial class TaskItem
             string due = match.Groups["due"].Success ? match.Groups["due"].Value : "";
             string state = match.Groups["state"].Success ? match.Groups["state"].Value : "";
             string uuid = match.Groups["uuid"].Success ? match.Groups["uuid"].Value : "";
+            string note = match.Groups["note"].Success ? match.Groups["note"].Value : "";
             var task = new TaskItem();
 
             task.ChangeDataWithoutMTime(TaskDataFlag.Name, name);
@@ -65,6 +68,7 @@ public partial class TaskItem
             task.ChangeDataWithoutMTime(TaskDataFlag.Project, project);
             task.ChangeDataWithoutMTime(TaskDataFlag.State, state);
             task.ChangeDataWithoutMTime(TaskDataFlag.UUID, uuid);
+            task.ChangeDataWithoutMTime(TaskDataFlag.Note, note);
 
             return task;
         }

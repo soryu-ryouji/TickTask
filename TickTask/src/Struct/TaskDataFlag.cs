@@ -8,5 +8,6 @@ public enum TaskDataFlag
     ModifiedDate,
     Project,
     State,
-    UUID
+    UUID,
+    Note,
 }

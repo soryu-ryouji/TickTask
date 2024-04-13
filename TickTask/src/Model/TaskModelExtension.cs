@@ -91,7 +91,7 @@ public partial class TaskModel
     public static void Export()
     {
         var text = string.Join(Environment.NewLine, s_tasks.Select(task => task.ToString()));
-        AssetManager.Save("data.ticktask", text);
+        AssetController.Save("data.ticktask", text);
     }
 
     public static List<TaskItem> Parse(List<string> text)
