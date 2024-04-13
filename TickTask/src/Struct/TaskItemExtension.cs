@@ -75,4 +75,10 @@ public partial class TaskItem
 
         throw new NotImplementedException();
     }
+
+    public string[] SplitNote()
+    {
+        var result = Note.Split("\\n");
+        return result;
+    }
 }

@@ -120,38 +120,30 @@ public class TaskController
         {
             if (!showCompleted && item.State == TaskState.Completed) continue;
 
-            var rowValues = new List<string>();
+            var rowData = new List<TableCell>();
 
             foreach (var field in metadata)
             {
                 switch (field.Trim().ToLower())
                 {
-                    case "order": rowValues.Add(TaskModel.SearchTask(item).ToString()); break;
+                    case "order": rowData.Add(new(TaskModel.SearchTask(item).ToString())); break;
                     case "description":
-                        if (item.Note != "")
+                        var cell = new TableCell(item.Name);
+                        if (item.Note.Length != 0)
                         {
-                            var content =
-                            $"""
-                            {item.Name}
-                            
-                            {item.Note}
-                            """;
-                            rowValues.Add(content);
+                            cell.Content.AddRange(item.SplitNote());
                         }
-                        else
-                        {
-                            rowValues.Add(item.Name);
-                        }
+                        rowData.Add(cell);
                         break;
-                    case "state": rowValues.Add(item.State.ToString()); break;
-                    case "project": rowValues.Add(item.Project); break;
-                    case "ctime": rowValues.Add(item.CTime); break;
-                    case "mtime": rowValues.Add(item.MTime); break;
+                    case "state": rowData.Add(new(item.State.ToString())); break;
+                    case "project": rowData.Add(new(item.Project)); break;
+                    case "ctime": rowData.Add(new(item.CTime)); break;
+                    case "mtime": rowData.Add(new(item.MTime)); break;
                     default: break;
                 }
             }
 
-            table.AddRow(rowValues.ToArray());
+            table.AddRow(rowData);
         }
 
         Console.Write(table.Export(20));
