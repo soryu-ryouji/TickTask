@@ -110,10 +110,13 @@ public class Table
 
         for (int r = 0; r < rowData.First().Count; r++)
         {
+            sb.Append("| ");
             for (int c = 0; c < rowData.Count; c++)
             {
                 sb.Append(rowData[c][r]);
-                sb.Append("  ");
+    
+                if (c + 1 == rowData.Count) sb.Append(" |");
+                else sb.Append(" | ");
             }
             sb.Append(Environment.NewLine);
         }
